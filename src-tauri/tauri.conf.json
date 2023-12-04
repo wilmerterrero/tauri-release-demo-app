@@ -1,0 +1,53 @@
+{
+  "build": {
+    "beforeDevCommand": "yarn dev",
+    "beforeBuildCommand": "yarn build",
+    "devPath": "http://localhost:1420",
+    "distDir": "../dist"
+  },
+  "package": {
+    "productName": "tauri-release-demo-app",
+    "version": "0.0.1"
+  },
+  "tauri": {
+    "allowlist": {
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true
+      }
+    },
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://gist.githubusercontent.com/wilmerterrero/aca77113b2fcf3882e4052b654696e34/raw/9eda9a24ea085f0be5411a30551aed123ff6afa5/updater.json"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IENGM0RGMTQ3ODM5Mzk0OTYKUldTV2xKT0RSL0U5ejc5Y1VIUTlGRnFvbC9nUWhUbUxSUVI0OFRoRzFnZ3g5MGhTL0MxdDRycGUK%"
+    },
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "com.tauri.dev",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ]
+    },
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "resizable": true,
+        "title": "tauri-release-demo-app",
+        "width": 800,
+        "height": 600
+      }
+    ]
+  }
+}
