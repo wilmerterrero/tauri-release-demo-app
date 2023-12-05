@@ -6,7 +6,7 @@
     "distDir": "../dist"
   },
   "package": {
-    "productName": "tauri-release-demo-app",
+    "productName": "TauriReleaseDemoApp",
     "version": "0.0.1"
   },
   "tauri": {
