@@ -10,30 +10,35 @@ env:
 jobs:
   release:
     if: contains(github.event.head_commit.message, 'release')
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - os: macos-latest
-            target: aarch64-apple-darwin
-          - os: macos-latest
-            target: x86_64-apple-darwin
-    runs-on: ${{ matrix.os }}
+        platform: [macos-latest]
+    runs-on: ${{ matrix.platform }}
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Rust setup
         uses: dtolnay/rust-toolchain@stable
+
       - name: Rust cache
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "./src-tauri -> target"
-      - if: matrix.target
-        run: rustup target add ${{ matrix.target }}
-      - name: Use Node.js 18
-        uses: actions/setup-node@v4
+
+      - name: Sync node version and setup cache
+        uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: "yarn"
+
       - name: Install frontend dependencies
         run: yarn install
+
       - name: Build app
         uses: tauri-apps/tauri-action@v0
         env:
@@ -50,4 +55,3 @@ jobs:
           releaseBody: "See the assets to download and install this version."
           releaseDraft: true
           prerelease: false
-          args: ${{ matrix.target && format('--target {0}', matrix.target) }}
