@@ -51,7 +51,7 @@ jobs:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         with:
-          tagName: tauri-release-demo-app-v__VERSION__
+          tagName: demo_app-v__VERSION__
           releaseName: "Tauri Release Demo App v__VERSION__"
           releaseBody: "See the assets to download and install this version."
           releaseDraft: true
