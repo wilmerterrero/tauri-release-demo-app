@@ -15,11 +15,7 @@ jobs:
       matrix:
         include:
           - os: macos-latest
-            target: aarch64-apple-darwin
-          - os: macos-latest
-            target: x86_64-apple-darwin
-          - os: ubuntu-20.04
-          - os: windows-latest
+            target: universal-apple-darwin
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -36,16 +32,13 @@ jobs:
           workspaces: "./src-tauri -> target"
       - if: matrix.target
         run: rustup target add ${{ matrix.target }}
-      - uses: pnpm/action-setup@v2.4.0
-        with:
-          version: 8
       - name: Use Node.js 18
         uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: "pnpm"
+          cache: "yarn"
       - name: Install frontend dependencies
-        run: pnpm install
+        run: yarn install
       - name: Build app
         uses: tauri-apps/tauri-action@v0
         env:
