@@ -33,7 +33,7 @@ jobs:
         with:
           node-version: 18
           cache: "yarn"
-          cache-dependency-path: "**/yarn.lock"
+          cache-dependency-path: "./tauri-release-demo-app/yarn.lock"
       - name: Install frontend dependencies
         run: yarn install
       - name: Build app
