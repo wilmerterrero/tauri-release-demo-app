@@ -70,11 +70,9 @@ jobs:
         with:
           node-version: 18
 
-      - name: Update file
+      - name: Update JSON updater file
         working-directory: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIST_ID: ${{ secrets.GIST_ID }}
-        run: |
-          - name: Run updater script
-            run: node ./scripts/updater.mjs ${{ needs.release.outputs.releaseId }}
+        run: node ./scripts/updater.mjs ${{ needs.release.outputs.releaseId }}
