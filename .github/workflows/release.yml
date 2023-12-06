@@ -67,34 +67,38 @@ jobs:
           releaseBody: "See the assets to download and install this version."
           args: ${{ matrix.target && format('--target {0}', matrix.target) }}
 
-      - name: Set Release ID as Output
-        run: echo "releaseId=${{ steps.tauri_build.outputs.releaseId }}" >> $GITHUB_OUTPUT
-
-  update_json:
-    runs-on: macos-latest
-    needs: release
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Cache Node Modules
-        uses: actions/cache@v2
-        with:
-          path: |
-            **/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Set Node.js Env
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-          cache: "yarn"
-
-      - name: Log Release ID
-        run: echo "Release ID = ${{ needs.release.outputs.releaseId }}"
-
       - name: Update JSON updater file
         working-directory: ./
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GIST_ID: ${{ secrets.GIST_ID }}
-        run: node ./scripts/updater.mjs ${{ needs.release.outputs.releaseId }}
+        run: node ./scripts/updater.mjs ${{ steps.tauri_build.outputs.releaseId }}
+
+  # update_json:
+  #   runs-on: macos-latest
+  #   needs: release
+  #   steps:
+  #     - uses: actions/checkout@v3
+
+  #     - name: Cache Node Modules
+  #       uses: actions/cache@v2
+  #       with:
+  #         path: |
+  #           **/node_modules
+  #         key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+
+  #     - name: Set Node.js Env
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: 18
+  #         cache: "yarn"
+
+  #     - name: Log Release ID
+  #       run: echo "Release ID = ${{ needs.release.outputs.releaseId }}"
+
+  #     - name: Update JSON updater file
+  #       working-directory: ./
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #         GIST_ID: ${{ secrets.GIST_ID }}
+  #       run: node ./scripts/updater.mjs ${{ needs.release.outputs.releaseId }}
