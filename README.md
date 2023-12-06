@@ -9,5 +9,6 @@ This template should help get you started developing with Tauri, React and Types
 # tauri-release-demo-app
 
 Documentation to reaf to automate the release process:
-[Sign MacOS App](https://tauri.app/v1/guides/distribution/sign-macos)
-[Tauri Updater](https://tauri.app/v1/guides/distribution/updater)
+
+- [Sign MacOS App](https://tauri.app/v1/guides/distribution/sign-macos)
+- [Tauri Updater](https://tauri.app/v1/guides/distribution/updater)
