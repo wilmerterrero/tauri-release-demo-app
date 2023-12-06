@@ -1,4 +1,5 @@
-import { getOctokit, context } from "@actions/github";
+import { context } from "@actions/github";
+import { Octokit } from "@octokit/core";
 import core from "@actions/core";
 
 /**
@@ -7,13 +8,22 @@ import core from "@actions/core";
  */
 export default async function uploadVersionJSON({ releaseId }) {
   try {
-    if (process.env.GITHUB_TOKEN === undefined) {
-      throw new Error("GITHUB_TOKEN is required");
+    if (process.env.GH_PERSONAL_ACCESS_TOKEN === undefined) {
+      core.setFailed("GH_PERSONAL_ACCESS_TOKEN is required");
+    }
+    if (process.env.GIST_ID === undefined) {
+      core.setFailed("GIST_ID is required");
+    }
+    if (releaseId === undefined) {
+      core.setFailed("releaseId is required");
     }
 
-    const github = getOctokit(process.env.GITHUB_TOKEN);
+    const octokit = new Octokit({
+      auth: process.env.GH_PERSONAL_ACCESS_TOKEN,
+    });
 
     const versionFilename = "latest.json";
+    const ghVersion = "2022-11-28";
 
     core.info("------------------------------------");
     core.info(`Updating ${versionFilename} for release ${releaseId}`);
@@ -21,11 +31,17 @@ export default async function uploadVersionJSON({ releaseId }) {
     core.info(`Repo: ${context.repo.repo}`);
     core.info("------------------------------------");
 
-    const assets = await github.rest.repos.listReleaseAssets({
-      owner: context.repo.owner,
-      repo: context.repo.repo,
-      release_id: releaseId,
-    });
+    const assets = await octokit.request(
+      "GET /repos/{owner}/{repo}/releases/{release_id}/assets",
+      {
+        owner: context.repo.owner,
+        repo: context.repo.repo,
+        release_id: releaseId,
+        headers: {
+          "X-GitHub-Api-Version": ghVersion,
+        },
+      }
+    );
     const asset = assets.data.find((e) => e.name === versionFilename);
 
     if (!asset) {
@@ -34,25 +50,20 @@ export default async function uploadVersionJSON({ releaseId }) {
 
     const assetContent = await (await fetch(asset.browser_download_url)).json();
 
-    const gist = await github.rest.gists.get({
+    const action = await octokit.request("PATCH /gists/{gist_id}", {
       gist_id: process.env.GIST_ID,
-    });
-
-    const file = gist.data.files[versionFilename];
-
-    if (!file) {
-      core.setFailed(`File ${versionFilename} not found`);
-    }
-
-    const action = await github.rest.gists.update({
-      gist_id: process.env.GIST_ID,
+      description: "Updating file via Release Action",
       files: {
         [versionFilename]: {
           content: JSON.stringify(assetContent, null, 2),
         },
       },
+      headers: {
+        "X-GitHub-Api-Version": ghVersion,
+      },
     });
-    core.info("Succesfully updated latest.json");
+
+    core.info(`Succesfully updated: ${versionFilename}`);
     core.info("------------------------------------");
     core.info(
       action.data?.files
