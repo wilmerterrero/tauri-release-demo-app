@@ -68,7 +68,6 @@ jobs:
           args: ${{ matrix.target && format('--target {0}', matrix.target) }}
 
       - name: Set Release ID as Output
-        id: set_output
         run: echo "releaseId=${{ steps.tauri_build.outputs.releaseId }}" >> $GITHUB_OUTPUT
 
   update_json:
@@ -89,6 +88,9 @@ jobs:
         with:
           node-version: 18
           cache: "yarn"
+
+      - name: Log Release ID
+        run: echo "Release ID = ${{ needs.release.outputs.releaseId }}"
 
       - name: Update JSON updater file
         working-directory: ./

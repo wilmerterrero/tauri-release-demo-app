@@ -66,6 +66,7 @@ export default async function uploadVersionJSON({ releaseId }) {
 }
 
 function run() {
+  core.info("Args passed: " + process.argv);
   const releaseId = parseInt(process.argv[2], 10);
   uploadVersionJSON({ releaseId });
 }
