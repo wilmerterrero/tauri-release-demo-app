@@ -2,8 +2,7 @@ import { getOctokit, context } from "@actions/github";
 import core from "@actions/core";
 
 /**
- * 	releaseId: number;
- * @param releaseId
+ * @param releaseId {{releaseId: number}}
  * @returns {Promise<void>}
  */
 export default async function uploadVersionJSON({ releaseId }) {
@@ -15,6 +14,12 @@ export default async function uploadVersionJSON({ releaseId }) {
     const github = getOctokit(process.env.GITHUB_TOKEN);
 
     const versionFilename = "latest.json";
+
+    core.info("------------------------------------");
+    core.info(`Updating ${versionFilename} for release ${releaseId}`);
+    core.info(`Owner: ${context.repo.owner}`);
+    core.info(`Repo: ${context.repo.repo}`);
+    core.info("------------------------------------");
 
     const assets = await github.rest.repos.listReleaseAssets({
       owner: context.repo.owner,

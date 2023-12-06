@@ -51,6 +51,7 @@ jobs:
         run: yarn install
 
       - name: Build app
+        id: tauri_build
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -65,6 +66,10 @@ jobs:
           releaseName: "Tauri Release Demo App v__VERSION__"
           releaseBody: "See the assets to download and install this version."
           args: ${{ matrix.target && format('--target {0}', matrix.target) }}
+
+      - name: Set Release ID as Output
+        id: set_output
+        run: echo "releaseId=${{ steps.tauri_build.outputs.releaseId }}" >> $GITHUB_OUTPUT
 
   update_json:
     runs-on: macos-latest
