@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "demoapp",
-    "version": "0.0.1"
+    "version": "0.0.2"
   },
   "tauri": {
     "allowlist": {
@@ -20,7 +20,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://gist.githubusercontent.com/wilmerterrero/aca77113b2fcf3882e4052b654696e34/raw/9eda9a24ea085f0be5411a30551aed123ff6afa5/updater.json"
+        "https://gist.githubusercontent.com/wilmerterrero/aca77113b2fcf3882e4052b654696e34/raw/latest.json"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEMyNTlDNzQ1NTFDMTRCNwpSV1MzRkJ4VmRKd2xERWoyRDE2U2owZTF2OW15NkNleUYvbUJ3dlRxZjR0RElyMU5IMmIxN3dvRQo="
